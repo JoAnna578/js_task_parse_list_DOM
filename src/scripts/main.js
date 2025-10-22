@@ -1,42 +1,44 @@
 'use strict';
 
-// Pobranie listy i elementów li
-const list = document.querySelector('ul');
-const listItems = document.querySelectorAll('ul li[data-position]');
-
 // Funkcja do konwersji pensji "$123,456" na liczbę
 function parseSalary(salaryStr) {
   return Number(salaryStr.replace(/[$,]/g, ''));
 }
 
-// Funkcja sortująca elementy po pensji malejąco
-function sortBySalary(items) {
-  return Array.from(items).sort(
+// Funkcja sortująca elementy po pensji malejąco i przenosząca je w DOM
+function sortList(listElement) {
+  const items = Array.from(listElement.querySelectorAll('li[data-position]'));
+  const sortedItems = items.sort(
     (a, b) => parseSalary(b.dataset.salary) - parseSalary(a.dataset.salary)
   );
+
+  // Przeniesienie elementów w DOM w nowej kolejności
+  sortedItems.forEach((item) => listElement.appendChild(item));
+
+  return sortedItems;
 }
 
 // Funkcja tworząca tablicę obiektów pracowników
-function getEmployeesArray(items) {
+function getEmployees(listElement) {
+  const items = listElement.querySelectorAll('li[data-position]');
   return Array.from(items).map((item) => ({
     name: item.textContent.trim(),
     position: item.dataset.position,
     salary: parseSalary(item.dataset.salary),
-    age: Number(item.dataset.age)
+    age: Number(item.dataset.age),
   }));
 }
 
-// Sortowanie elementów
-const sortedItems = sortBySalary(listItems);
+// Pobranie elementu listy <ul>
+const list = document.querySelector('ul');
 
-// Przeniesienie elementów w DOM w kolejności malejącej
-sortedItems.forEach((item) => list.appendChild(item));
-
-// Tworzenie tablicy employees i przypisanie do window
-window.employees = getEmployeesArray(sortedItems);
+// Wywołanie funkcji
+const sortedItems = sortList(list);
+window.employees = getEmployees(list);
 
 // Udostępnienie funkcji globalnie dla testów
-window.sortBySalary = () => sortedItems;
-window.getEmployeesArray = () => window.employees;
+window.sortList = sortList;
+window.getEmployees = getEmployees;
+
 
 
