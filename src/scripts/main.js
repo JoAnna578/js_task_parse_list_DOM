@@ -1,32 +1,22 @@
 'use strict';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const list = document.querySelector('.employees'); // lista z atrybutami data-*
+// Pobieramy wszystkie elementy listy
+const items = document.querySelectorAll('.employee-list li');
 
-  if (!list) return; // guard, jeśli lista nie istnieje
+// Funkcja pomocnicza do pobrania wartości salary z atrybutu data
+const getSalary = el => parseInt(el.dataset.salary, 10);
 
-  // Funkcja sortująca elementy listy po pensji malejąco
-  function sortBySalaryDesc(listElement) {
-    const items = Array.from(listElement.children);
-    items.sort((a, b) => Number(b.dataset.salary) - Number(a.dataset.salary));
-    items.forEach(item => listElement.appendChild(item)); // aktualizacja DOM
-  }
+// Sortujemy elementy po salary malejąco
+const sortedItems = Array.from(items).sort((a, b) => getSalary(b) - getSalary(a));
 
-  // Funkcja zwracająca tablicę obiektów
-  function getEmployeesArray(listElement) {
-    return Array.from(listElement.children).map(item => ({
-      name: item.dataset.name,
-      position: item.dataset.position,
-      salary: Number(item.dataset.salary),
-      age: Number(item.dataset.age)
-    }));
-  }
+// Tworzymy tablicę obiektów employees
+const employees = sortedItems.map(el => ({
+  name: el.dataset.name,
+  position: el.dataset.position,
+  salary: getSalary(el),
+  age: parseInt(el.dataset.age, 10)
+}));
 
-  // Wywołanie funkcji
-  sortBySalaryDesc(list);
-  const employees = getEmployeesArray(list);
-
-  // Można odkomentować, jeśli chcesz zobaczyć wynik w konsoli
-  // console.log(employees);
-});
+// Możesz sprawdzić wynik w konsoli
+console.log(employees);
 
