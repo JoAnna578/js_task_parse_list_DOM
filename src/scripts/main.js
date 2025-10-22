@@ -21,3 +21,13 @@ function getEmployeesArray(items) {
   });
 }
 
+// Pobranie elementów listy
+const listItems = document.querySelectorAll('li[data-name]');
+
+// Sortowanie i tworzenie tablicy pracowników
+const sortedItems = sortBySalary(Array.from(listItems));
+window.employees = getEmployeesArray(sortedItems);
+
+// Udostępnienie funkcji globalnie dla testów
+window.sortBySalary = sortBySalary;
+window.getEmployeesArray = getEmployeesArray;
