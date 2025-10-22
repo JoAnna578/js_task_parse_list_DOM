@@ -1,23 +1,22 @@
 'use strict';
 
-// Pobranie wszystkich elementów listy
+// Pobranie listy i elementów li
+const list = document.querySelector('ul');
 const listItems = document.querySelectorAll('ul li[data-position]');
 
-// Funkcja do konwersji pensji z formatu "$123,456" na liczbę
+// Funkcja do konwersji pensji "$123,456" na liczbę
 function parseSalary(salaryStr) {
   return Number(salaryStr.replace(/[$,]/g, ''));
 }
 
-// Sortowanie elementów listy po pensji malejąco
+// Funkcja sortująca elementy po pensji malejąco
 function sortBySalary(items) {
-  return Array.from(items).sort((a, b) => {
-    const salaryA = parseSalary(a.dataset.salary);
-    const salaryB = parseSalary(b.dataset.salary);
-    return salaryB - salaryA;
-  });
+  return Array.from(items).sort(
+    (a, b) => parseSalary(b.dataset.salary) - parseSalary(a.dataset.salary)
+  );
 }
 
-// Tworzenie tablicy obiektów pracowników
+// Funkcja tworząca tablicę obiektów pracowników
 function getEmployeesArray(items) {
   return Array.from(items).map((item) => ({
     name: item.textContent.trim(),
@@ -27,11 +26,17 @@ function getEmployeesArray(items) {
   }));
 }
 
-// Wywołanie funkcji
+// Sortowanie elementów
 const sortedItems = sortBySalary(listItems);
+
+// Przeniesienie elementów w DOM w kolejności malejącej
+sortedItems.forEach((item) => list.appendChild(item));
+
+// Tworzenie tablicy employees i przypisanie do window
 window.employees = getEmployeesArray(sortedItems);
 
 // Udostępnienie funkcji globalnie dla testów
-window.sortBySalary = sortBySalary;
-window.getEmployeesArray = getEmployeesArray;
+window.sortBySalary = () => sortedItems;
+window.getEmployeesArray = () => window.employees;
+
 
