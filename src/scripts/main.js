@@ -8,14 +8,14 @@ function parseSalary(salaryStr) {
 // Funkcja sortująca elementy po pensji malejąco i przenosząca je w DOM
 function sortList(listElement) {
   const items = Array.from(listElement.querySelectorAll('li[data-position]'));
-  const sortedItems = items.sort(
+  const sorted = items.sort(
     (a, b) => parseSalary(b.dataset.salary) - parseSalary(a.dataset.salary)
   );
 
   // Przeniesienie elementów w DOM w nowej kolejności
-  sortedItems.forEach((item) => listElement.appendChild(item));
+  sorted.forEach((item) => listElement.appendChild(item));
 
-  return sortedItems;
+  return sorted;
 }
 
 // Funkcja tworząca tablicę obiektów pracowników
@@ -33,12 +33,13 @@ function getEmployees(listElement) {
 const list = document.querySelector('ul');
 
 // Wywołanie funkcji
-const sortedItems = sortList(list);
+sortList(list);
 window.employees = getEmployees(list);
 
 // Udostępnienie funkcji globalnie dla testów
 window.sortList = sortList;
 window.getEmployees = getEmployees;
+
 
 
 
