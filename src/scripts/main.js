@@ -34,7 +34,7 @@ function getEmployees(listSelector) {
 
 // Wywołanie funkcji na stronie
 sortList('ul');                  // sortujemy listę w DOM
-const employees = getEmployees('ul');  // tworzymy tablicę obiektów
+
 
 
 
