@@ -35,7 +35,6 @@ function getEmployees(listSelector) {
 // Wywołanie funkcji na stronie
 sortList('ul');                  // sortujemy listę w DOM
 const employees = getEmployees('ul');  // tworzymy tablicę obiektów
-console.log(employees);          // log do konsoli, żeby sprawdzić wynik
 
 
 
