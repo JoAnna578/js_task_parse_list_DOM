@@ -1,45 +1,41 @@
 'use strict';
 
-// Funkcja do konwersji pensji "$123,456" na liczbę
+// Helper: konwertuje salary z "$123,456" na liczbę
 function parseSalary(salaryStr) {
-  return Number(salaryStr.replace(/[$,]/g, ''));
+  return Number(salaryStr.replace('$', '').replace(/,/g, ''));
 }
 
-// Funkcja sortująca elementy po pensji malejąco i przenosząca je w DOM
-function sortList(listElement) {
-  const items = Array.from(listElement.querySelectorAll('li[data-position]'));
-  const sorted = items.sort(
-    (a, b) => parseSalary(b.dataset.salary) - parseSalary(a.dataset.salary)
-  );
+// Funkcja sortująca listę po salary malejąco
+function sortList(listSelector) {
+  const list = document.querySelector(listSelector);
+  if (!list) return;
 
-  // Przeniesienie elementów w DOM w nowej kolejności
-  sorted.forEach((item) => listElement.appendChild(item));
+  const items = Array.from(list.children);
 
-  return sorted;
+  // Sortowanie malejąco po salary
+  items.sort((a, b) => parseSalary(b.dataset.salary) - parseSalary(a.dataset.salary));
+
+  // Dodanie posortowanych elementów do DOM
+  items.forEach((item) => list.appendChild(item));
 }
 
-// Funkcja tworząca tablicę obiektów pracowników
-function getEmployees(listElement) {
-  const items = listElement.querySelectorAll('li[data-position]');
-  return Array.from(items).map((item) => ({
-    name: item.textContent.trim(),
-    position: item.dataset.position,
-    salary: parseSalary(item.dataset.salary),
-    age: Number(item.dataset.age),
+// Funkcja zwracająca tablicę obiektów pracowników
+function getEmployees(listSelector) {
+  const list = document.querySelector(listSelector);
+  if (!list) return [];
+
+  return Array.from(list.children).map((li) => ({
+    name: li.textContent.trim(),
+    position: li.dataset.position,
+    salary: parseSalary(li.dataset.salary),
+    age: Number(li.dataset.age),
   }));
 }
 
-// Pobranie elementu listy <ul>
-const list = document.querySelector('ul');
-
-// Wywołanie funkcji
-sortList(list);
-window.employees = getEmployees(list);
-
-// Udostępnienie funkcji globalnie dla testów
-window.sortList = sortList;
-window.getEmployees = getEmployees;
-
+// Wywołanie funkcji na stronie
+sortList('ul');                  // sortujemy listę w DOM
+const employees = getEmployees('ul');  // tworzymy tablicę obiektów
+console.log(employees);          // log do konsoli, żeby sprawdzić wynik
 
 
 
